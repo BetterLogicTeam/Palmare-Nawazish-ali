@@ -11,11 +11,16 @@ import { ToastContainer, toast } from 'react-toastify';
 import { CopyToClipboard, onCopy } from 'react-copy-to-clipboard';
 
 function Main_home() {
+  let [accadress, setaccadress] = useState('')
 
   let [minimumbuytoken, setminimumbuytoken] = useState(null)
+  let [maxbuytoken, setmaximumbuytoken] = useState(null)
+
   let [pricepertoken, setpricepertoken] = useState(null)
   let [inputvalue, setinputvalue] = useState('')
-  let [refreallink, setrefreallink] = useState("")
+  let [refreallinks, setrefreallink] = useState("")
+  let [owneradress, setowneradress] = useState("")
+
 
   let [inputvaluerunx, setinputvaluerunx] = useState('')
 
@@ -26,6 +31,8 @@ function Main_home() {
   let [userbalance, setuserbalance] = useState('')
   let [display, setdisplay] = useState(true)
   let [copied, setcopied] = useState(false)
+  let [owneralreadyexist, setowneralreadyexist] = useState()
+
 
 
 
@@ -40,26 +47,41 @@ function Main_home() {
       toast.error("Wrong Newtwork please connect to BSC MainNet ")
     } else {
       try {
-
+        setaccadress(acc)
 
         const web3 = window.web3;
         let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
+        let owneradress = await palmareContractOf.methods._owner().call();
+        setowneradress(owneradress)
+
+        let owneralreadyexist = await palmareContractOf.methods._chakUpline(acc, owneradress).call();
+        setowneralreadyexist(owneralreadyexist)
 
 
+
+        // setrefreallink( owneradress)
         let minimumbuytoken = await palmareContractOf.methods.MinimumBuyTokn().call();
         minimumbuytoken = window.web3.utils.fromWei(minimumbuytoken, "ether")
         setminimumbuytoken(minimumbuytoken)
 
+        // alert('iofjsdpocfsdjakl')
+
+        let maximumbuytoken = await palmareContractOf.methods.vestingAmount(acc).call();
+        // minimumbuytoken = window.web3.utils.fromWei(minimumbuytoken, "ether")
+        setmaximumbuytoken(minimumbuytoken)
+
+
+
 
         let pricePrToken = await palmareContractOf.methods.pricePrToken().call();
         pricePrToken = window.web3.utils.fromWei(pricePrToken, "ether")
-        console.log("pricePrToken", pricePrToken);
+        // console.log("pricePrToken", pricePrToken);
         setpricepertoken(pricePrToken)
 
         let userbalance = await web3.eth.getBalance(acc)
         userbalance = window.web3.utils.fromWei(userbalance, "ether")
         setuserbalance(userbalance)
-        console.log("currrentbalances", userbalance);
+        // console.log("currrentbalances", userbalance);
 
         let currrentbalance = await palmareContractOf.methods.balanceOf(acc).call();
         currrentbalance = window.web3.utils.fromWei(currrentbalance, "ether")
@@ -68,112 +90,118 @@ function Main_home() {
 
 
       } catch (e) {
-        toast.error(e)
+        toast.error(e.messasge)
       }
 
     }
   }
+
+  const changePassword = async () => {
+    try {
+      const web3 = window.web3;
+      let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
+      let owneralreadyexist = await palmareContractOf.methods._chakUpline(owneradress, accadress).call();
+      // let owneralreadyexist = false;
+      setowneralreadyexist(owneralreadyexist)
+      console.log("Addresschange", owneralreadyexist);
+
+
+    } catch (e) {
+      console.log("Erroe whil cal chang_address functio", e);
+    }
+  }
+
+
+
+  const check = () => {
+    let url = window.location.href
+    if (url.includes("referrallink")) {
+      var position = url.indexOf('=')
+      position = position + 1
+
+      let metamaskadress = url.slice(position);
+      setrefreallink(metamaskadress)
+
+    }
+    else {
+      if (owneralreadyexist) {
+        setrefreallink(accadress)
+      }
+      else {
+        setrefreallink(owneradress)
+      }
+    }
+  }
   useEffect(() => {
     myfun()
-    setrefreallink(window.location.href)
 
-  }, [0]);
+    check()
+    changePassword()
+
+    // setInterval(() => {
+    // }, 1000);
+
+  }, [refreallinks, owneradress]);
+
 
   const bnbtorunx = async (value) => {
-    let acc = await loadWeb3();
-    // console.log("ACC=",acc)
-    if (acc == "No Wallet") {
-      toast.error("No Wallet Connected")
-    }
-    else if (acc == "Wrong Network") {
-      toast.error("Wrong Newtwork please connect to BSC MainNet ")
-    } else {
-      try {
 
-        const web3 = window.web3;
-        let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
+    try {
+
+      const web3 = window.web3;
+      let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
 
 
-        console.log("what is enter value", value);
-        const myvalue = web3.utils.toWei(value)
-        console.log("after converting ", myvalue);
+      console.log("what is enter value", value);
+      const myvalue = web3.utils.toWei(value)
+      console.log("after converting ", myvalue);
 
-        let check_bnbValue = await palmareContractOf.methods.check_tokenValue(myvalue).call();
-        let value_after = web3.utils.fromWei(check_bnbValue)
-        // value_after = web3.utils.fromWei(value_after)
-        console.log("check_bnbValue after fromwei", value_after);
-        setbnbvalue(value_after)
+      let check_bnbValue = await palmareContractOf.methods.check_tokenValue(myvalue).call();
+      let value_after = web3.utils.fromWei(check_bnbValue)
 
+      setbnbvalue(value_after)
 
-
-      } catch (e) {
-        console.log(e);
-        // setinputdatahere(" ")
-        // toast.error("User Is Not Exists")
-        // setButtonOne("Mint With BNB")
-
-      }
+    } catch (e) {
+      console.log(e);
+      // setinputdatahere(" ")
+      // toast.error("User Is Not Exists")
+      // setButtonOne("Mint With BNB")
 
     }
+
+
   }
   const convertbnbtorunx = async (e) => {
     setinputvalue(e.target.value)
     bnbtorunx(e.target.value)
   }
+  console.log('what is adress after connect', refreallinks)
   const buyToken = async () => {
 
-    let acc = await loadWeb3();
-    // console.log("ACC=",acc)
-    if (acc == "No Wallet") {
-      toast.error("No Wallet Connected")
+
+    try {
+
+      const web3 = window.web3;
+      let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
+
+
+      console.log("what is enter value", inputvalue);
+      let val = web3.utils.toWei(inputvalue);
+
+      let check_bnbValue = await palmareContractOf.methods.BuyToken(owneradress).send({ from: accadress, value: val });
+      setrefreallink(accadress)
+
+      console.log("check token ", check_bnbValue);
+
+
+
+    } catch (e) {
+      console.log(e);
+
+      toast.error(e.messasge)
+
     }
-    else if (acc == "Wrong Network") {
-      toast.error("Wrong Newtwork please connect to BSC MainNet ")
-    } else {
-      try {
 
-
-
-        const web3 = window.web3;
-        let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
-
-
-        console.log("what is enter value", inputvalue);
-        // let myvalue = web3.utils.toWei(inputvalue)
-        let val = web3.utils.toWei(inputvalue);
-        console.log('what is the value  towei', val)
-
-        // let myvalue = parseInt(inputvalue)
-        // console.log("zzz ", web3.utils.toWei(myvalue).toString());
-
-        let check_bnbValue = await palmareContractOf.methods.BuyToken().send({ from: acc, value: val });
-        // let value_after = web3.utils.fromWei(check_bnbValue)
-        // value_after = web3.utils.fromWei(value_after)
-        console.log("check token ", check_bnbValue);
-        // setbnbvalue(value_after)
-
-        // setminimumbuytoken(minimumbuytoken)
-
-
-
-        // let pricePrToken = await nftContractOf.methods.pricePrToken().call();
-        // pricePrToken = window.web3.utils.fromWei(pricePrToken, "ether")
-        // console.log("pricePrToken", pricePrToken);
-        // setpricepertoken(pricePrToken)
-
-
-
-
-
-      } catch (e) {
-        console.log(e);
-        // setinputdatahere(" ")
-        // toast.error("User Is Not Exists")
-        // setButtonOne("Mint With BNB")
-
-
-      }
-    }
 
 
   }
@@ -183,98 +211,75 @@ function Main_home() {
 
   }
   const runxtobnb = async (value) => {
-    let acc = await loadWeb3();
-    // console.log("ACC=",acc)
-    if (acc == "No Wallet") {
-      toast.error("No Wallet Connected")
+
+    try {
+
+      const web3 = window.web3;
+      let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
+
+
+      console.log("what is enter value", value);
+
+
+      let myvalue = web3.utils.toWei(value.toString())
+      myvalue = myvalue.toString()
+      console.log("after converting ", myvalue);
+
+      let check_bnbValue = await palmareContractOf.methods.check_bnbValue((myvalue).toString()).call();
+      // let value_afcheck_bnbValueter = web3.utils.fromWei()
+      let value_after = web3.utils.fromWei(check_bnbValue)
+      console.log("check_bnbValue sadasd latest", check_bnbValue);
+      // console.log("check_bnbValue runx latest", value_after);
+      setrunxvalue(value_after)
+
+
+
+    } catch (e) {
+      console.log(e);
+      toast.error(e.messasge)
     }
-    else if (acc == "Wrong Network") {
-      toast.error("Wrong Newtwork please connect to BSC MainNet ")
-    } else {
-      try {
 
 
-
-        const web3 = window.web3;
-        let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
-
-
-        console.log("what is enter value", value);
-
-
-        let myvalue = web3.utils.toWei(value.toString())
-        myvalue = myvalue.toString()
-        console.log("after converting ", myvalue);
-
-        let check_bnbValue = await palmareContractOf.methods.check_bnbValue((myvalue).toString()).call();
-        // let value_afcheck_bnbValueter = web3.utils.fromWei()
-        let value_after = web3.utils.fromWei(check_bnbValue)
-        console.log("check_bnbValue sadasd latest", check_bnbValue);
-        // console.log("check_bnbValue runx latest", value_after);
-        setrunxvalue(value_after)
-
-
-
-      } catch (e) {
-        console.log(e);
-        // setinputdatahere(" ")
-        // toast.error("User Is Not Exists")
-        // setButtonOne("Mint With BNB")
-
-
-      }
-
-    }
   }
   const buyRunx = async () => {
 
-    let acc = await loadWeb3();
-    // console.log("ACC=",acc)
-    if (acc == "No Wallet") {
-      toast.error("No Wallet Connected")
+
+    try {
+
+
+
+      const web3 = window.web3;
+      let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
+      let palmareTokenof = new web3.eth.Contract(palmareTokenAbi, palmareTokenAddress);
+      let check_runxvalue = await palmareTokenof.methods.approve(palmareContractAddress, inputvaluerunx).send({ from: accadress });
+      console.log("what is enter runx token value from approve", check_runxvalue);
+
+      // console.log("what is enter runx token value", inputvaluerunx);
+      // let myvalue = web3.utils.toWei(inputvalue)
+      // let val = web3.utils.toWei(inputvaluerunx);
+      // console.log('what is the value  towei', val)
+
+      // let myvalue = parseInt(inputvalue)
+      // console.log("zzz ", web3.utils.toWei(myvalue).toString());
+
+      let check_bnbValue = await palmareContractOf.methods.SaleToken(inputvaluerunx).send({ from: accadress });
+      // let value_after = web3.utils.fromWei(check_bnbValue)
+      // value_after = web3.utils.fromWei(value_after)
+      console.log("check runx ", check_bnbValue);
+
+
+      // let pricePrToken = await nftContractOf.methods.pricePrToken().call();
+      // pricePrToken = window.web3.utils.fromWei(pricePrToken, "ether")
+      // console.log("pricePrToken", pricePrToken);
+      // setpricepertoken(pricePrToken)
+
+
+    } catch (e) {
+      console.log(e);
+
+      toast.error(e.messasge)
     }
-    else if (acc == "Wrong Network") {
-      toast.error("Wrong Newtwork please connect to BSC MainNet ")
-    } else {
-      try {
 
-
-
-        const web3 = window.web3;
-        let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
-        let palmareTokenof = new web3.eth.Contract(palmareTokenAbi, palmareTokenAddress);
-        let check_runxvalue = await palmareTokenof.methods.approve(palmareContractAddress, inputvaluerunx).send({ from: acc });
-        console.log("what is enter runx token value from approve", check_runxvalue);
-
-        // console.log("what is enter runx token value", inputvaluerunx);
-        // let myvalue = web3.utils.toWei(inputvalue)
-        // let val = web3.utils.toWei(inputvaluerunx);
-        // console.log('what is the value  towei', val)
-
-        // let myvalue = parseInt(inputvalue)
-        // console.log("zzz ", web3.utils.toWei(myvalue).toString());
-
-        let check_bnbValue = await palmareContractOf.methods.SaleToken(inputvaluerunx).send({ from: acc });
-        // let value_after = web3.utils.fromWei(check_bnbValue)
-        // value_after = web3.utils.fromWei(value_after)
-        console.log("check runx ", check_bnbValue);
-
-
-        // let pricePrToken = await nftContractOf.methods.pricePrToken().call();
-        // pricePrToken = window.web3.utils.fromWei(pricePrToken, "ether")
-        // console.log("pricePrToken", pricePrToken);
-        // setpricepertoken(pricePrToken)
-
-
-      } catch (e) {
-        console.log(e);
-        // setinputdatahere(" ")
-        toast.error("User Is Not Exists")
-        // setButtonOne("Mint With BNB")
-
-
-      }
-    }
 
 
   }
@@ -429,11 +434,11 @@ function Main_home() {
                     </div>
                     <div className="row justify-content-between mt-3">
                       <div className="col-lg-6">
-                        <p className="card_para">Max Purchase</p>
-                        <p className="cardd_h">129032.0 PAL</p>
+                        <p className="card_para">withdrawable Amount</p>
+                        <p className="cardd_h">{maxbuytoken}</p>
                       </div>
                       <div className="col-lg-6">
-                        <p className="card_para">Price in next round</p>
+                        <p className="card_para">Withdraw amount</p>
                         <p className="cardd_h">0.0186 BUSD</p>
                       </div>
                     </div>
@@ -449,7 +454,7 @@ function Main_home() {
               {swap}
               <div className="col-md-10 mt-5 ">
                 <input
-                  value={refreallink}
+                  value={`http://localhost:3000/?referrallink=${refreallinks}`}
 
                   placeholder="refreal link "
                   className="  rounded-5 py-2 bg-transparent form-control"
@@ -457,7 +462,7 @@ function Main_home() {
 
               </div>
               <div className="col-md-2 mt-5">
-                <CopyToClipboard onCopy={onCopy} text={refreallink}>
+                <CopyToClipboard onCopy={onCopy} text={refreallinks}>
                   <button className="btn btn-dark rounded-5 ">Copy Link</button>
 
                 </CopyToClipboard>
