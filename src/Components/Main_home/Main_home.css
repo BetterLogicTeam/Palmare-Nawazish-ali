@@ -1,35 +1,38 @@
-.Main_bg{
+.Main_bg {
     background-color: white !important;
     padding: 15px 0px !important;
 }
 
-.Main_inner{
-    background: linear-gradient(151.42deg,#b5e8e3 -.25%,#e0fbb5 103.01%);
+.Main_inner {
+    background: linear-gradient(151.42deg, #b5e8e3 -.25%, #e0fbb5 103.01%);
     padding: 30px;
     border-radius: 25px;
-   
+
     margin-bottom: 20px;
-    
+
     gap: 20px;
 }
-.box{
+
+.box {
     width: 50%;
     background: #ffffff;
     border-radius: 20px;
     box-shadow: 0 4px 12px #0000000d;
     /* padding: 0 30px; */
 }
-.box_h{
+
+.box_h {
     margin-top: 0;
     margin-bottom: 0.5rem;
     font-weight: 500;
     line-height: 1.2;
     color: black;
-    font-size:20px ;
+    font-size: 20px;
     text-align: left;
 
 }
-.btn_card{
+
+.btn_card {
     background-color: #198754;
     height: 24.5px;
     margin-right: 10px;
@@ -37,49 +40,64 @@
     color: white;
     padding: 0px 5px !important;
 }
-.line{
+
+.line {
     display: flex;
     justify-content: center;
     align-items: center;
 
-    background-color:  #dcdcdc !important;
+    background-color: #dcdcdc !important;
     width: 90%;
-    height:2px;
+    height: 2px;
     margin-top: 20px;
 
 }
-.card_para{
+
+.card_para {
     color: #0009;
     font-size: 1rem;
     margin-bottom: 0;
     text-align: left;
     padding-left: 20px;
 }
-.cardd_h{
+
+.cardd_h {
     font-size: 1.5rem;
     font-weight: 600;
     text-align: left;
-    padding-left:20px ;
+    padding-left: 20px;
     color: black;
 }
-.grey_div{
+
+.grey_div {
     background: #f4f4f4;
     border: 1px solid #e4e4e4;
     border-radius: 16px;
     padding: 10px 20px;
 }
-.input_card{
+
+.input_card {
     width: 100%;
     border: none;
     background: transparent;
     font-size: 1.2rem;
-    
+
 }
-.input_card:hover{
-    outline: none ;
+
+.form-control {
+    border: #b5e8e3 5px solid !important;
+}
+
+.input_card:hover {
+    outline: none;
     border: none;
 }
-.input_btn{
+
+.input_btn {
     background-color: #2dc99a;
     border-radius: 50px;
+}
+
+.jhiujhui {
+    border: 2px solid black;
 }

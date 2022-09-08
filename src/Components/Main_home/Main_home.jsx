@@ -4,43 +4,46 @@ import "./Main_home.css";
 import busd from "../Assets/busd.png";
 import pal from "../Assets/pal.png";
 import { AiOutlineArrowDown } from "react-icons/ai";
-import { palmareContractAddress, palmareContractAbi } from '../../utilies/Bsc_contract';
+import { palmareContractAddress, palmareContractAbi, palmareTokenAddress, palmareTokenAbi } from '../../utilies/Bsc_contract';
 import { loadWeb3 } from '../../apis/api';
 import Web3, { fromWei } from 'web3'
+import { ToastContainer, toast } from 'react-toastify';
+import { CopyToClipboard, onCopy } from 'react-copy-to-clipboard';
 
 function Main_home() {
 
   let [minimumbuytoken, setminimumbuytoken] = useState(null)
   let [pricepertoken, setpricepertoken] = useState(null)
   let [inputvalue, setinputvalue] = useState('')
+  let [refreallink, setrefreallink] = useState("")
+
+  let [inputvaluerunx, setinputvaluerunx] = useState('')
 
   let [valueinbnb, setbnbvalue] = useState('')
+  let [valueinrunx, setrunxvalue] = useState('')
+
   let [currentbalance, setcurrentbalance] = useState('')
   let [userbalance, setuserbalance] = useState('')
-
-
-
+  let [display, setdisplay] = useState(true)
+  let [copied, setcopied] = useState(false)
 
 
 
   const myfun = async () => {
-    // console.log("res",inputValue)
-    // setShowModal(false)
+
     let acc = await loadWeb3();
-    // console.log("ACC=",acc)
+
     if (acc == "No Wallet") {
-      // toast.error("No Wallet Connected")
+      toast.error("No Wallet Connected")
     }
     else if (acc == "Wrong Network") {
-      // toast.error("Wrong Newtwork please connect to BSC MainNet ")
+      toast.error("Wrong Newtwork please connect to BSC MainNet ")
     } else {
       try {
 
 
-
         const web3 = window.web3;
         let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
-
 
 
         let minimumbuytoken = await palmareContractOf.methods.MinimumBuyTokn().call();
@@ -62,39 +65,30 @@ function Main_home() {
         currrentbalance = window.web3.utils.fromWei(currrentbalance, "ether")
 
         setcurrentbalance(currrentbalance)
-        // console.log("currrentbalance", currrentbalance);
 
 
       } catch (e) {
-        console.log(e);
-        // setinputdatahere(" ")
-        // toast.error("User Is Not Exists")
-        // setButtonOne("Mint With BNB")
-
-
+        toast.error(e)
       }
 
     }
   }
   useEffect(() => {
     myfun()
-    console.log("what is input value", inputvalue)
+    setrefreallink(window.location.href)
 
-
-  });
+  }, [0]);
 
   const bnbtorunx = async (value) => {
     let acc = await loadWeb3();
     // console.log("ACC=",acc)
     if (acc == "No Wallet") {
-      // toast.error("No Wallet Connected")
+      toast.error("No Wallet Connected")
     }
     else if (acc == "Wrong Network") {
-      // toast.error("Wrong Newtwork please connect to BSC MainNet ")
+      toast.error("Wrong Newtwork please connect to BSC MainNet ")
     } else {
       try {
-
-
 
         const web3 = window.web3;
         let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
@@ -118,7 +112,6 @@ function Main_home() {
         // toast.error("User Is Not Exists")
         // setButtonOne("Mint With BNB")
 
-
       }
 
     }
@@ -132,10 +125,10 @@ function Main_home() {
     let acc = await loadWeb3();
     // console.log("ACC=",acc)
     if (acc == "No Wallet") {
-      // toast.error("No Wallet Connected")
+      toast.error("No Wallet Connected")
     }
     else if (acc == "Wrong Network") {
-      // toast.error("Wrong Newtwork please connect to BSC MainNet ")
+      toast.error("Wrong Newtwork please connect to BSC MainNet ")
     } else {
       try {
 
@@ -184,7 +177,231 @@ function Main_home() {
 
 
   }
+  const convertrunxtobnb = (e) => {
+    setinputvaluerunx(e.target.value)
+    runxtobnb(e.target.value)
 
+  }
+  const runxtobnb = async (value) => {
+    let acc = await loadWeb3();
+    // console.log("ACC=",acc)
+    if (acc == "No Wallet") {
+      toast.error("No Wallet Connected")
+    }
+    else if (acc == "Wrong Network") {
+      toast.error("Wrong Newtwork please connect to BSC MainNet ")
+    } else {
+      try {
+
+
+
+        const web3 = window.web3;
+        let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
+
+
+        console.log("what is enter value", value);
+
+
+        let myvalue = web3.utils.toWei(value.toString())
+        myvalue = myvalue.toString()
+        console.log("after converting ", myvalue);
+
+        let check_bnbValue = await palmareContractOf.methods.check_bnbValue((myvalue).toString()).call();
+        // let value_afcheck_bnbValueter = web3.utils.fromWei()
+        let value_after = web3.utils.fromWei(check_bnbValue)
+        console.log("check_bnbValue sadasd latest", check_bnbValue);
+        // console.log("check_bnbValue runx latest", value_after);
+        setrunxvalue(value_after)
+
+
+
+      } catch (e) {
+        console.log(e);
+        // setinputdatahere(" ")
+        // toast.error("User Is Not Exists")
+        // setButtonOne("Mint With BNB")
+
+
+      }
+
+    }
+  }
+  const buyRunx = async () => {
+
+    let acc = await loadWeb3();
+    // console.log("ACC=",acc)
+    if (acc == "No Wallet") {
+      toast.error("No Wallet Connected")
+    }
+    else if (acc == "Wrong Network") {
+      toast.error("Wrong Newtwork please connect to BSC MainNet ")
+    } else {
+      try {
+
+
+
+        const web3 = window.web3;
+        let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
+        let palmareTokenof = new web3.eth.Contract(palmareTokenAbi, palmareTokenAddress);
+        let check_runxvalue = await palmareTokenof.methods.approve(palmareContractAddress, inputvaluerunx).send({ from: acc });
+        console.log("what is enter runx token value from approve", check_runxvalue);
+
+        // console.log("what is enter runx token value", inputvaluerunx);
+        // let myvalue = web3.utils.toWei(inputvalue)
+        // let val = web3.utils.toWei(inputvaluerunx);
+        // console.log('what is the value  towei', val)
+
+        // let myvalue = parseInt(inputvalue)
+        // console.log("zzz ", web3.utils.toWei(myvalue).toString());
+
+        let check_bnbValue = await palmareContractOf.methods.SaleToken(inputvaluerunx).send({ from: acc });
+        // let value_after = web3.utils.fromWei(check_bnbValue)
+        // value_after = web3.utils.fromWei(value_after)
+        console.log("check runx ", check_bnbValue);
+
+
+        // let pricePrToken = await nftContractOf.methods.pricePrToken().call();
+        // pricePrToken = window.web3.utils.fromWei(pricePrToken, "ether")
+        // console.log("pricePrToken", pricePrToken);
+        // setpricepertoken(pricePrToken)
+
+
+      } catch (e) {
+        console.log(e);
+        // setinputdatahere(" ")
+        toast.error("User Is Not Exists")
+        // setButtonOne("Mint With BNB")
+
+
+      }
+    }
+
+
+  }
+  onCopy = () => {
+    setcopied(true);
+  };
+  const clickme = () => {
+    setdisplay(!display)
+  }
+  let swap;
+  if (display) {
+    swap =
+      <div className="col-lg-6 sm ">
+        <div className="card py-3">
+          <div className="card-body">
+            <div className="grey_div">
+              <div className="d-flex justify-content-between">
+                <p>From</p>
+                <p>Balance: {userbalance} </p>
+              </div>
+              <div className="row">
+                <div className="col-lg-6">
+                  <input
+                    type="text"
+                    value={inputvalue}
+                    placeholder="0.0"
+                    className="input_card"
+                    onChange={convertbnbtorunx}
+                  />
+                </div>
+                <div className="col-lg-6">
+                  <button className="btn input_btn ">Max</button>
+                  <img src={busd} alt="" />
+                </div>
+              </div>
+            </div>
+            <AiOutlineArrowDown className="fs-4 fw-bold my-2" onClick={clickme}></AiOutlineArrowDown>
+            <div className="grey_div">
+              <div className="d-flex justify-content-between">
+                <p>To</p>
+                <p>Balance: {currentbalance} </p>
+              </div>
+              <div className="row">
+                <div className="col-lg-6">
+                  <input
+                    type="text"
+                    value={valueinbnb}
+                    placeholder="0.0"
+                    className="input_card"
+                  />
+                </div>
+                <div className="col-lg-6">
+                  <button className="btn input_btn ">Max</button>
+                  <img src={pal} alt="" />
+                </div>
+              </div>
+              <div className="d-flex justify-content-between mt-2">
+                <p>Rate</p>
+                <p>0.0155 BUSD = 1 PAL</p>
+              </div>
+              <button className="btn btn-dark rounded-5 w-100" onClick={buyToken}>Connect</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  }
+  else {
+    swap = <div className="col-lg-6 sm ">
+      <div className="card py-3">
+        <div className="card-body">
+          <div className="grey_div">
+            <div className="d-flex justify-content-between">
+              <p>From</p>
+              <p>Balance: {currentbalance} </p>
+            </div>
+            <div className="row">
+              <div className="col-lg-6">
+                <input
+                  type="text"
+                  onChange={convertrunxtobnb}
+                  value={inputvaluerunx}
+                  placeholder="0.0"
+                  className="input_card"
+                />
+              </div>
+              <div className="col-lg-6">
+                <button className="btn input_btn ">Max</button>
+                <img src={pal} alt="" />
+              </div>
+            </div>
+            <div className="d-flex justify-content-between mt-2">
+              <p>Rate</p>
+              <p>0.0155 BUSD = 1 PAL</p>
+            </div>
+          </div>
+          <AiOutlineArrowDown className="fs-4 fw-bold my-2" onClick={clickme}></AiOutlineArrowDown>
+
+          <div className="grey_div">
+            <div className="d-flex justify-content-between">
+              <p>To</p>
+              <p>Balance: {userbalance} </p>
+            </div>
+            <div className="row">
+              <div className="col-lg-6">
+                <input
+                  type="text"
+                  value={valueinrunx}
+
+                  placeholder="0.0"
+                  className="input_card"
+
+                />
+              </div>
+              <div className="col-lg-6">
+                <button className="btn input_btn ">Max</button>
+                <img src={busd} alt="" />
+              </div>
+
+            </div>
+            <button className="btn btn-dark rounded-5 w-100 mt-2" onClick={buyRunx}>Connect</button>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  }
   return (
     <div className="Main_bg">
       <div className="container Main_inner">
@@ -229,60 +446,25 @@ function Main_home() {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6 sm ">
-                <div className="card py-3">
-                  <div className="card-body">
-                    <div className="grey_div">
-                      <div className="d-flex justify-content-between">
-                        <p>From</p>
-                        <p>Balance: {userbalance} </p>
-                      </div>
-                      <div className="row">
-                        <div className="col-lg-6">
-                          <input
-                            type="text"
-                            value={inputvalue}
-                            placeholder="0.0"
-                            className="input_card"
-                            onChange={convertbnbtorunx}
-                          />
-                        </div>
-                        <div className="col-lg-6">
-                          <button className="btn input_btn ">Max</button>
-                          <img src={busd} alt="" />
-                        </div>
-                      </div>
-                    </div>
-                    <AiOutlineArrowDown className="fs-4 fw-bold my-2"></AiOutlineArrowDown>
-                    <div className="grey_div">
-                      <div className="d-flex justify-content-between">
-                        <p>To</p>
-                        <p>Balance: {currentbalance} </p>
-                      </div>
-                      <div className="row">
-                        <div className="col-lg-6">
-                          <input
-                            type="text"
-                            value={valueinbnb}
-                            placeholder="0.0"
-                            className="input_card"
-                          />
-                        </div>
-                        <div className="col-lg-6">
-                          <button className="btn input_btn ">Max</button>
-                          <img src={pal} alt="" />
-                        </div>
-                      </div>
-                      <div className="d-flex justify-content-between mt-2">
-                        <p>Rate</p>
-                        <p>0.0155 BUSD = 1 PAL</p>
-                      </div>
-                      <button className="btn btn-dark rounded-5 w-100" onClick={buyToken}>Connect</button>
-                    </div>
-                  </div>
-                </div>
+              {swap}
+              <div className="col-md-10 mt-5 ">
+                <input
+                  value={refreallink}
+
+                  placeholder="refreal link "
+                  className="  rounded-5 py-2 bg-transparent form-control"
+                />
+
+              </div>
+              <div className="col-md-2 mt-5">
+                <CopyToClipboard onCopy={onCopy} text={refreallink}>
+                  <button className="btn btn-dark rounded-5 ">Copy Link</button>
+
+                </CopyToClipboard>
               </div>
             </div>
+
+
           </div>
         </div>
       </div>
