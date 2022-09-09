@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import "./Main_home.css";
 import busd from "../Assets/busd.png";
-import pal from "../Assets/pal.png";
+import Runx from "../Assets/Runx.png";
 import { AiOutlineArrowDown } from "react-icons/ai";
 import { palmareContractAddress, palmareContractAbi, palmareTokenAddress, palmareTokenAbi } from '../../utilies/Bsc_contract';
 import { loadWeb3 } from '../../apis/api';
@@ -12,6 +12,21 @@ import { CopyToClipboard, onCopy } from 'react-copy-to-clipboard';
 
 function Main_home() {
   let [accadress, setaccadress] = useState('')
+  let [withdrawableamount, setwithdrawableamount] = useState('')
+  let [rewardtime, setrewardtime] = useState('')
+  let [withdrawupcoming, setwithdrawupcoming] = useState('')
+  let [days, setDays_here] = useState('')
+
+  let [hours, setHours_here] = useState('')
+
+  let [minutes, setMunits_here] = useState('')
+
+  let [seconds, setSeconds] = useState('')
+
+
+
+
+
 
   let [minimumbuytoken, setminimumbuytoken] = useState(null)
   let [maxbuytoken, setmaximumbuytoken] = useState(null)
@@ -20,6 +35,7 @@ function Main_home() {
   let [inputvalue, setinputvalue] = useState('')
   let [refreallinks, setrefreallink] = useState("")
   let [owneradress, setowneradress] = useState("")
+  let [initiallink, setinitiallink] = useState("http://localhost:3000/?referrallink=")
 
 
   let [inputvaluerunx, setinputvaluerunx] = useState('')
@@ -75,7 +91,7 @@ function Main_home() {
 
         let pricePrToken = await palmareContractOf.methods.pricePrToken().call();
         pricePrToken = window.web3.utils.fromWei(pricePrToken, "ether")
-        // console.log("pricePrToken", pricePrToken);
+
         setpricepertoken(pricePrToken)
 
         let userbalance = await web3.eth.getBalance(acc)
@@ -88,7 +104,18 @@ function Main_home() {
 
         setcurrentbalance(currrentbalance)
 
+        let withdrawableamount = await palmareContractOf.methods.vestingAmount(acc).call();
+        withdrawableamount = window.web3.utils.fromWei(withdrawableamount, "ether")
 
+
+        setwithdrawableamount(withdrawableamount)
+
+        // setrewardtime(rewardtime)
+
+        let users = await palmareContractOf.methods.users(acc).call();
+        users = window.web3.utils.fromWei(users.upcomingreward, "ether")
+
+        setwithdrawupcoming(users)
       } catch (e) {
         toast.error(e.messasge)
       }
@@ -96,15 +123,64 @@ function Main_home() {
     }
   }
 
+  const rewardTime = async () => {
+    const web3 = window.web3;
+    let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
+    let user = await palmareContractOf.methods.users(accadress).call();
+
+
+
+    let timer_get = user.time;
+    timer_get = 1662726280;
+    if (timer_get <= 0) {
+      setDays_here(0)
+      setHours_here(0)
+      setMunits_here(0)
+      setSeconds(0)
+
+    }
+    else {
+      var currentDateTime = new Date();
+      let resultInSeconds = currentDateTime.getTime() / 1000;
+      let Time_here = (timer_get) - resultInSeconds
+      let TimeFinal = parseInt(Time_here)
+      if (TimeFinal > 0) {
+        let days = parseInt(TimeFinal / 86400)
+
+        setDays_here(days)
+        TimeFinal = TimeFinal % (86400)
+        let hours = parseInt(TimeFinal / 3600)
+        setHours_here(hours)
+        TimeFinal %= 3600
+        let munites = parseInt(TimeFinal / 60)
+        setMunits_here(munites)
+        TimeFinal %= 60
+        let second_here = parseInt(TimeFinal)
+        console.log('what is result in seconds', second_here)
+        setSeconds(second_here)
+      }
+      else {
+        setDays_here(0)
+        setHours_here(0)
+        setMunits_here(0)
+        setSeconds(0)
+      }
+
+    }
+  }
   const changePassword = async () => {
     try {
+      let acc = await loadWeb3();
+
+
       const web3 = window.web3;
       let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
-      let owneralreadyexist = await palmareContractOf.methods._chakUpline(owneradress, accadress).call();
-      // let owneralreadyexist = false;
+      let owneradress = await palmareContractOf.methods._owner().call();
+
+      let owneralreadyexist = await palmareContractOf.methods._chakUpline(owneradress, acc).call();
+      // owneralreadyexist = true;
       setowneralreadyexist(owneralreadyexist)
       console.log("Addresschange", owneralreadyexist);
-
 
     } catch (e) {
       console.log("Erroe whil cal chang_address functio", e);
@@ -136,13 +212,29 @@ function Main_home() {
     myfun()
 
     check()
-    changePassword()
 
-    // setInterval(() => {
-    // }, 1000);
+    changePassword()
+    setInterval(() => {
+      rewardTime()
+    }, 1000);
 
   }, [refreallinks, owneradress]);
+  const withdrawamount = async () => {
+    try {
 
+      const web3 = window.web3;
+      let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
+
+      let withdrawremeningAmount = await palmareContractOf.methods.withdrawremeningAmount().send({ from: accadress });
+      console.log('what is withdraweramout', withdrawremeningAmount)
+
+    } catch (e) {
+      console.log(e);
+
+      toast.error(e.messasge)
+
+    }
+  }
 
   const bnbtorunx = async (value) => {
 
@@ -175,7 +267,7 @@ function Main_home() {
     setinputvalue(e.target.value)
     bnbtorunx(e.target.value)
   }
-  console.log('what is adress after connect', refreallinks)
+
   const buyToken = async () => {
 
 
@@ -202,8 +294,6 @@ function Main_home() {
 
     }
 
-
-
   }
   const convertrunxtobnb = (e) => {
     setinputvaluerunx(e.target.value)
@@ -216,7 +306,6 @@ function Main_home() {
 
       const web3 = window.web3;
       let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
-
 
       console.log("what is enter value", value);
 
@@ -251,7 +340,11 @@ function Main_home() {
       const web3 = window.web3;
       let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
       let palmareTokenof = new web3.eth.Contract(palmareTokenAbi, palmareTokenAddress);
-      let check_runxvalue = await palmareTokenof.methods.approve(palmareContractAddress, inputvaluerunx).send({ from: accadress });
+      console.log('what is input value', inputvaluerunx)
+      let val = web3.utils.toWei(inputvaluerunx);
+      console.log('what is input value after towi', val)
+
+      let check_runxvalue = await palmareTokenof.methods.approve(palmareContractAddress, val).send({ from: accadress });
       console.log("what is enter runx token value from approve", check_runxvalue);
 
       // console.log("what is enter runx token value", inputvaluerunx);
@@ -262,7 +355,7 @@ function Main_home() {
       // let myvalue = parseInt(inputvalue)
       // console.log("zzz ", web3.utils.toWei(myvalue).toString());
 
-      let check_bnbValue = await palmareContractOf.methods.SaleToken(inputvaluerunx).send({ from: accadress });
+      let check_bnbValue = await palmareContractOf.methods.SaleToken(val).send({ from: accadress });
       // let value_after = web3.utils.fromWei(check_bnbValue)
       // value_after = web3.utils.fromWei(value_after)
       console.log("check runx ", check_bnbValue);
@@ -279,8 +372,6 @@ function Main_home() {
 
       toast.error(e.messasge)
     }
-
-
 
   }
   onCopy = () => {
@@ -333,14 +424,14 @@ function Main_home() {
                 </div>
                 <div className="col-lg-6">
                   <button className="btn input_btn ">Max</button>
-                  <img src={pal} alt="" />
+                  <img src={Runx} alt="" style={{ width: "32px", height: "32px" }} />
                 </div>
               </div>
-              <div className="d-flex justify-content-between mt-2">
+              {/* <div className="d-flex justify-content-between mt-2">
                 <p>Rate</p>
                 <p>0.0155 BUSD = 1 PAL</p>
-              </div>
-              <button className="btn btn-dark rounded-5 w-100" onClick={buyToken}>Connect</button>
+              </div> */}
+              <button className="btn btn-dark rounded-5 w-100 mt-2" onClick={buyToken}>Connect</button>
             </div>
           </div>
         </div>
@@ -367,13 +458,13 @@ function Main_home() {
               </div>
               <div className="col-lg-6">
                 <button className="btn input_btn ">Max</button>
-                <img src={pal} alt="" />
+                <img src={Runx} alt="" style={{ width: "32px", height: "32px" }} />
               </div>
             </div>
-            <div className="d-flex justify-content-between mt-2">
+            {/* <div className="d-flex justify-content-between mt-2">
               <p>Rate</p>
               <p>0.0155 BUSD = 1 PAL</p>
-            </div>
+            </div> */}
           </div>
           <AiOutlineArrowDown className="fs-4 fw-bold my-2" onClick={clickme}></AiOutlineArrowDown>
 
@@ -416,10 +507,10 @@ function Main_home() {
               <div className="col-lg-6 ">
                 <div className="card ">
                   <div className="card-body">
-                    <h3 className="box_h">Initial Phase Offering</h3>
+                    <h3 className="box_h">Runx Phase </h3>
                     <div className="d-flex justify-content-start">
                       <button className="btn btn_card">Live</button>
-                      <span>Phase 2 is Live</span>
+                      <span>Phase is Live</span>
                     </div>
                     <div className="line"></div>
                     <div className="row justify-content-between mt-3">
@@ -434,27 +525,41 @@ function Main_home() {
                     </div>
                     <div className="row justify-content-between mt-3">
                       <div className="col-lg-6">
-                        <p className="card_para">withdrawable Amount</p>
-                        <p className="cardd_h">{maxbuytoken}</p>
+                        <p className="card_para">Referral Reward</p>
+                        <p className="cardd_h">{maxbuytoken} BNB</p>
                       </div>
                       <div className="col-lg-6">
-                        <p className="card_para">Withdraw amount</p>
-                        <p className="cardd_h">0.0186 BUSD</p>
+                        <p className="card_para">Reward Time</p>
+                        <p className="cardd_h">{days}:{hours}:{minutes}:{seconds}</p>
                       </div>
                     </div>
-                    <p className="card_para mb-2">swap progress</p>
+                    <div className="row mt-3">
+                      <div className="col-lg-6">
+                        <p className="card_para">withdrawable Amount</p>
+                        <p className="cardd_h">{withdrawableamount} Token</p>
+
+                        <button className="btn btn-dark rounded-5 d-flex justify-content-lg-start ms-3" onClick={withdrawamount}>Withdraw</button>
+
+                      </div>
+                      <div className="col-lg-6">
+                        <p className="card_para">Remaning Amount</p>
+                        <p className="cardd_h">{withdrawupcoming}</p>
+
+                      </div>
+                    </div>
+                    {/* <p className="card_para mb-2">swap progress</p>
                     <ProgressBar variant="success" now={60} />;
                     <div className="d-flex justify-content-between">
                       <p className="card_para  ">57.60%</p>
                       <p className="card_para ">8175483.0/14193548.0 PAL</p>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
               {swap}
               <div className="col-md-10 mt-5 ">
                 <input
-                  value={`http://localhost:3000/?referrallink=${refreallinks}`}
+                  value={`${initiallink}${refreallinks}`}
 
                   placeholder="refreal link "
                   className="  rounded-5 py-2 bg-transparent form-control"
@@ -462,9 +567,8 @@ function Main_home() {
 
               </div>
               <div className="col-md-2 mt-5">
-                <CopyToClipboard onCopy={onCopy} text={refreallinks}>
+                <CopyToClipboard onCopy={onCopy} text={initiallink + refreallinks}>
                   <button className="btn btn-dark rounded-5 ">Copy Link</button>
-
                 </CopyToClipboard>
               </div>
             </div>
