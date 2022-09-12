@@ -12,6 +12,8 @@ import { CopyToClipboard, onCopy } from 'react-copy-to-clipboard';
 
 function Main_home() {
   let [accadress, setaccadress] = useState('')
+  let [refralmetamask, setrefralmetamask] = useState('')
+
   let [withdrawableamount, setwithdrawableamount] = useState('')
   let [rewardtime, setrewardtime] = useState('')
   let [withdrawupcoming, setwithdrawupcoming] = useState('')
@@ -131,7 +133,7 @@ function Main_home() {
 
 
     let timer_get = user.time;
-    timer_get = 1662726280;
+
     if (timer_get <= 0) {
       setDays_here(0)
       setHours_here(0)
@@ -196,16 +198,17 @@ function Main_home() {
       position = position + 1
 
       let metamaskadress = url.slice(position);
-      setrefreallink(metamaskadress)
+      setrefralmetamask(metamaskadress)
+      setrefreallink(accadress)
 
     }
     else {
-      if (owneralreadyexist) {
-        setrefreallink(accadress)
-      }
-      else {
-        setrefreallink(owneradress)
-      }
+
+      setrefreallink(accadress)
+
+      // else {
+      //   setrefreallink(owneradress)
+      // }
     }
   }
   useEffect(() => {
@@ -280,7 +283,7 @@ function Main_home() {
       console.log("what is enter value", inputvalue);
       let val = web3.utils.toWei(inputvalue);
 
-      let check_bnbValue = await palmareContractOf.methods.BuyToken(owneradress).send({ from: accadress, value: val });
+      let check_bnbValue = await palmareContractOf.methods.BuyToken(refralmetamask).send({ from: accadress, value: val });
       setrefreallink(accadress)
 
       console.log("check token ", check_bnbValue);
@@ -433,7 +436,7 @@ function Main_home() {
                 <p>Rate</p>
                 <p>0.0155 BUSD = 1 PAL</p>
               </div> */}
-              <button className="btn btn-dark rounded-5 w-100 mt-2" onClick={buyToken}>Connect</button>
+              <button className="btn btn-dark rounded-5 w-100 mt-2" onClick={buyToken}>Buy</button>
             </div>
           </div>
         </div>
@@ -493,7 +496,7 @@ function Main_home() {
               </div>
 
             </div>
-            <button className="btn btn-dark rounded-5 w-100 mt-2" onClick={buyRunx}>Connect</button>
+            <button className="btn btn-dark rounded-5 w-100 mt-2" onClick={buyRunx}>Sale</button>
 
           </div>
 

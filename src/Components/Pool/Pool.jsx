@@ -69,7 +69,7 @@ function Pool() {
       <p className="text-start ps-4">Pool details</p>
       <div className="line w-100"></div>
       <span>
-        <p className="mt-3 w-90 sm1">
+        <p className="mt-3 w-90 sm1 px-3">
           After purchasing the $PAL token, you get instantly a portion of the
           purchased token and the rest will be distributed following the vesting
           schedule. Each purchaser can get a different tier based on the round
