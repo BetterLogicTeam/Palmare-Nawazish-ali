@@ -32,8 +32,8 @@ function Main_home() {
   let [inputvalue, setinputvalue] = useState('')
   let [refreallinks, setrefreallink] = useState("")
   let [owneradress, setowneradress] = useState("")
-  let [initiallink, setinitiallink] = useState("http://localhost:3000/?referrallink=")
-
+  let [initiallink, setinitiallink] = useState("https://runxnew.netlify.app/?referrallink=")
+  // http://localhost:3000
 
   let [inputvaluerunx, setinputvaluerunx] = useState('')
 
