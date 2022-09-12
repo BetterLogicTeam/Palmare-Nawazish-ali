@@ -25,11 +25,6 @@ function Main_home() {
 
   let [seconds, setSeconds] = useState('')
 
-
-
-
-
-
   let [minimumbuytoken, setminimumbuytoken] = useState(null)
   let [maxbuytoken, setmaximumbuytoken] = useState(null)
 
@@ -75,21 +70,17 @@ function Main_home() {
         let owneralreadyexist = await palmareContractOf.methods._chakUpline(acc, owneradress).call();
         setowneralreadyexist(owneralreadyexist)
 
-
-
-        // setrefreallink( owneradress)
         let minimumbuytoken = await palmareContractOf.methods.MinimumBuyTokn().call();
         minimumbuytoken = window.web3.utils.fromWei(minimumbuytoken, "ether")
         setminimumbuytoken(minimumbuytoken)
 
-        // alert('iofjsdpocfsdjakl')
+
 
         let maximumbuytoken = await palmareContractOf.methods.vestingAmount(acc).call();
         // minimumbuytoken = window.web3.utils.fromWei(minimumbuytoken, "ether")
+
+        // set withdrawableamount is dummy  its update later
         setmaximumbuytoken(minimumbuytoken)
-
-
-
 
         let pricePrToken = await palmareContractOf.methods.pricePrToken().call();
         pricePrToken = window.web3.utils.fromWei(pricePrToken, "ether")
@@ -99,7 +90,6 @@ function Main_home() {
         let userbalance = await web3.eth.getBalance(acc)
         userbalance = window.web3.utils.fromWei(userbalance, "ether")
         setuserbalance(userbalance)
-        // console.log("currrentbalances", userbalance);
 
         let currrentbalance = await palmareContractOf.methods.balanceOf(acc).call();
         currrentbalance = window.web3.utils.fromWei(currrentbalance, "ether")
@@ -109,10 +99,7 @@ function Main_home() {
         let withdrawableamount = await palmareContractOf.methods.vestingAmount(acc).call();
         withdrawableamount = window.web3.utils.fromWei(withdrawableamount, "ether")
 
-
         setwithdrawableamount(withdrawableamount)
-
-        // setrewardtime(rewardtime)
 
         let users = await palmareContractOf.methods.users(acc).call();
         users = window.web3.utils.fromWei(users.upcomingreward, "ether")
@@ -130,8 +117,6 @@ function Main_home() {
     let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
     let user = await palmareContractOf.methods.users(accadress).call();
 
-
-
     let timer_get = user.time;
 
     if (timer_get <= 0) {
@@ -139,7 +124,6 @@ function Main_home() {
       setHours_here(0)
       setMunits_here(0)
       setSeconds(0)
-
     }
     else {
       var currentDateTime = new Date();
@@ -167,10 +151,9 @@ function Main_home() {
         setMunits_here(0)
         setSeconds(0)
       }
-
     }
   }
-  const changePassword = async () => {
+  const ownerAlreadyexist = async () => {
     try {
       let acc = await loadWeb3();
 
@@ -189,8 +172,6 @@ function Main_home() {
     }
   }
 
-
-
   const check = () => {
     let url = window.location.href
     if (url.includes("referrallink")) {
@@ -205,6 +186,7 @@ function Main_home() {
     else {
 
       setrefreallink(accadress)
+      setrefralmetamask(owneradress)
 
       // else {
       //   setrefreallink(owneradress)
@@ -213,29 +195,21 @@ function Main_home() {
   }
   useEffect(() => {
     myfun()
-
     check()
-
-    changePassword()
+    ownerAlreadyexist()
     setInterval(() => {
       rewardTime()
     }, 1000);
 
-  }, [refreallinks, owneradress]);
+  }, [refreallinks, owneradress, seconds]);
   const withdrawamount = async () => {
     try {
-
       const web3 = window.web3;
       let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
-
       let withdrawremeningAmount = await palmareContractOf.methods.withdrawremeningAmount().send({ from: accadress });
-      console.log('what is withdraweramout', withdrawremeningAmount)
-
-    } catch (e) {
-      console.log(e);
-
+    }
+    catch (e) {
       toast.error(e.messasge)
-
     }
   }
 
