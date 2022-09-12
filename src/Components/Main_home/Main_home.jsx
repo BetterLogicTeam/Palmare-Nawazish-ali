@@ -549,7 +549,7 @@ function Main_home() {
                       </div>
                       <div className="col-lg-6">
                         <p className="card_para">Remaning Amount</p>
-                        <p className="cardd_h">{withdrawupcoming}</p>
+                        <p className="cardd_h">{withdrawupcoming} BNB</p>
 
                       </div>
                     </div>
