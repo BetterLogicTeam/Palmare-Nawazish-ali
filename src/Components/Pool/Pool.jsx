@@ -76,7 +76,7 @@ function Pool() {
           number they joined. For more detail please visit{" "}
           <a href="">
             {" "}
-            https://docs.palmare.io/tokenomic/ipo-initial-phase-offering
+            https://runxnew.netlify.app/
           </a>
         </p>
       </span>
@@ -105,8 +105,8 @@ function Pool() {
                   <h6 className="fw-bold ">Vesting Schedule</h6>
                   <p className="ps-5">
                     {" "}
-                    15% unlock instanly after purchasing, 85% vesting monthly in
-                    15 months
+                    20% unlock instanly after purchasing, 80% vesting monthly in
+                    3 months
                   </p>
                 </div>
               </div>
@@ -124,9 +124,7 @@ function Pool() {
                     <div className="col-lg-6 p-0">
                       <div className="h4 mt-5 text-start">
                         <h4>Referral to Earn</h4>
-                        <p className="fs-6 ">Refer any participant to join the IPO, and then you can earn up to 6% commission on their deposits, 2% bonus from total reward of level 2 referrers. Commission will be instantly transferred to your wallet in BUSD.</p>
-
-
+                        <p className="fs-6 ">Refer any participant to join the Runx, and then you can earn up to 35% commission on their deposits. Commission will be instantly transferred to your wallet in BUSD.</p>
                         <button className="btn text-white  border rounded-5">Generate Referral Link</button>
                       </div>
                     </div>

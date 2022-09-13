@@ -10,7 +10,7 @@ import { loadWeb3 } from '../../apis/api';
 import Web3 from 'web3'
 
 function Heade() {
-  let [btnTxt, setBtTxt] = useState("Connect")
+  let [btnTxt, setBtTxt] = useState("Connect Wallet")
 
 
   const getaccount = async () => {
@@ -28,7 +28,7 @@ function Heade() {
     }
   }
   useEffect(() => {
-    getaccount()
+    // getaccount()
 
 
   });
@@ -49,7 +49,7 @@ function Heade() {
               <Nav.Link href="#pricing" className='text-dark  nav_lin ms-4 mt-2'> Roadmap </Nav.Link>
               <Nav.Link href="#pricing" className='text-dark  nav_lin ms-4 mt-2'> Partner </Nav.Link>
               <Nav.Link href="#pricing" className='text-dark  nav_lin ms-4 mt-2'> Documantion </Nav.Link>
-              <Nav.Link href="#pricing" className='text-dark  nav_lin ms-4 '><button className='btn border text-white rounded-5'>{btnTxt}</button> </Nav.Link>
+              <Nav.Link href="#pricing" className='text-dark  nav_lin ms-4 '><button className='btn border text-white rounded-5' onClick={getaccount}>{btnTxt} </button> </Nav.Link>
 
             </Nav>
 

@@ -513,7 +513,7 @@ function Main_home() {
                       </div>
                       <div className="col-lg-6">
                         <p className="card_para  text-white">Remaning Amount</p>
-                        <p className="cardd_h  text-white">{withdrawupcoming} BNB</p>
+                        <p className="cardd_h  text-white">{withdrawupcoming} Token</p>
 
                       </div>
                     </div>

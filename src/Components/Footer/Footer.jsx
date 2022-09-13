@@ -31,7 +31,7 @@ function Footer() {
                                 <FaDiscord className='footer_icons'></FaDiscord>
                             </div>
                             <div className="col-lg-7 p-0">
-                                <p>© 2022 Palmare Ltd. All rights reserved.</p>
+                                <p>© 2022 Runx Ltd. All rights reserved.</p>
                             </div>
                         </div>
 
