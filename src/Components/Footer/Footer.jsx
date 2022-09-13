@@ -1,6 +1,6 @@
 import React from 'react'
 import "./Footer.css"
-import logos from "../Assets/logo33.png"
+import logos from "../Assets/logo.png"
 
 import { AiOutlineTwitter } from 'react-icons/ai'
 import { FaTelegramPlane } from 'react-icons/fa'

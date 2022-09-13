@@ -1,10 +1,11 @@
 .Main_bg {
-    background-color: white !important;
+    /* background-color: white !important; */
     padding: 15px 0px !important;
+    background: linear-gradient(#004e92, #000428);
 }
 
 .Main_inner {
-    background: linear-gradient(151.42deg, #b5e8e3 -.25%, #e0fbb5 103.01%);
+
     padding: 30px;
     border-radius: 25px;
 
@@ -67,6 +68,11 @@
     text-align: left;
     padding-left: 20px;
     color: black;
+}
+
+.card {
+    background: linear-gradient(#43cea2, #185a9d);
+    color: white !important;
 }
 
 .grey_div {

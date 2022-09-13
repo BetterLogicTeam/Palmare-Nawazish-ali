@@ -10,7 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App bgcolor">
       <Header />
       <Main_home />
       <Pool />

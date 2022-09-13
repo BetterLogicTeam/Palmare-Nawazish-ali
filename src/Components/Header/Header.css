@@ -1,14 +1,20 @@
-.nav_lin{
+.nav_lin {
     font-weight: 700 !important;
     /* margin-top: 10px; */
-
+    color: white !important;
 }
-.nav_lin:hover{
+
+.nav_lin:hover {
 
     /* color: rgb(29, 29, 29) !important; */
     color: rgb(184, 183, 183) !important;
 }
-.btn_nav{
+
+.navbar-light .navbar-nav .nav-link {
+    color: white !important;
+}
+
+.btn_nav {
     padding: 10px 27px !important;
     /* border-radius: 50; */
     border-radius: 50px !important;
@@ -19,7 +25,8 @@
     background-color: #212529 !important;
     margin-top: -10px;
 }
+
 .navbar-dark .navbar-toggler {
-    color: rgba(255,255,255,.55);
-    border-color: rgba(255,255,255,.1);
+    color: rgba(255, 255, 255, .55);
+    border-color: rgba(255, 255, 255, .1);
 }

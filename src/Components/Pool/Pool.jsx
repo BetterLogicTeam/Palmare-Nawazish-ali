@@ -127,7 +127,7 @@ function Pool() {
                         <p className="fs-6 ">Refer any participant to join the IPO, and then you can earn up to 6% commission on their deposits, 2% bonus from total reward of level 2 referrers. Commission will be instantly transferred to your wallet in BUSD.</p>
 
 
-                        <button className="btn btn-outline-dark rounded-5">Generate Referral Link</button>
+                        <button className="btn text-white  border rounded-5">Generate Referral Link</button>
                       </div>
                     </div>
                   </div>

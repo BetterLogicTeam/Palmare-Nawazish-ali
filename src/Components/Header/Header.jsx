@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import logos from "../Assets/logo33.png"
+import logos from "../Assets/logo.png"
 import "./Header.css"
 // import { busdNftTokenAbi, busdNftTokenAddress, ULE_NFT_100, ULE_NFT_100_ABI, wireNftContractAbi, wireNftContractAddress, wireTokenAbi, wireTokenAddress } from '../../utilies/Bsc_contract';
 import { loadWeb3 } from '../../apis/api';
@@ -37,7 +37,7 @@ function Heade() {
   return (
     <div>
 
-      <Navbar collapseOnSelect expand="lg" bg="white" variant="light">
+      <Navbar collapseOnSelect expand="lg">
         <Container>
           <Navbar.Brand href="#home">  <img src={logos} style={{ height: "70px" }} /> </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" className='bgg' />
@@ -49,7 +49,7 @@ function Heade() {
               <Nav.Link href="#pricing" className='text-dark  nav_lin ms-4 mt-2'> Roadmap </Nav.Link>
               <Nav.Link href="#pricing" className='text-dark  nav_lin ms-4 mt-2'> Partner </Nav.Link>
               <Nav.Link href="#pricing" className='text-dark  nav_lin ms-4 mt-2'> Documantion </Nav.Link>
-              <Nav.Link href="#pricing" className='text-dark  nav_lin ms-4 mt-2'><button className='btn btn_nav'>{btnTxt}</button> </Nav.Link>
+              <Nav.Link href="#pricing" className='text-dark  nav_lin ms-4 '><button className='btn border text-white rounded-5'>{btnTxt}</button> </Nav.Link>
 
             </Nav>
 

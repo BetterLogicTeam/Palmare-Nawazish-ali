@@ -47,8 +47,6 @@ function Main_home() {
   let [owneralreadyexist, setowneralreadyexist] = useState()
 
 
-
-
   const myfun = async () => {
 
     let acc = await loadWeb3();
@@ -74,13 +72,11 @@ function Main_home() {
         minimumbuytoken = window.web3.utils.fromWei(minimumbuytoken, "ether")
         setminimumbuytoken(minimumbuytoken)
 
-
-
-        let maximumbuytoken = await palmareContractOf.methods.vestingAmount(acc).call();
-        // minimumbuytoken = window.web3.utils.fromWei(minimumbuytoken, "ether")
+        let maximumbuytoken = await palmareContractOf.methods.uplineamount().call();
+        maximumbuytoken = window.web3.utils.fromWei(maximumbuytoken, "ether")
 
         // set withdrawableamount is dummy  its update later
-        setmaximumbuytoken(minimumbuytoken)
+        setmaximumbuytoken(maximumbuytoken)
 
         let pricePrToken = await palmareContractOf.methods.pricePrToken().call();
         pricePrToken = window.web3.utils.fromWei(pricePrToken, "ether")
@@ -142,7 +138,7 @@ function Main_home() {
         setMunits_here(munites)
         TimeFinal %= 60
         let second_here = parseInt(TimeFinal)
-        console.log('what is result in seconds', second_here)
+        // console.log('what is result in seconds', second_here)
         setSeconds(second_here)
       }
       else {
@@ -247,12 +243,10 @@ function Main_home() {
 
   const buyToken = async () => {
 
-
     try {
 
       const web3 = window.web3;
       let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
-
 
       console.log("what is enter value", inputvalue);
       let val = web3.utils.toWei(inputvalue);
@@ -262,13 +256,9 @@ function Main_home() {
 
       console.log("check token ", check_bnbValue);
 
-
-
-    } catch (e) {
-      console.log(e);
-
+    }
+    catch (e) {
       toast.error(e.messasge)
-
     }
 
   }
@@ -361,14 +351,14 @@ function Main_home() {
   if (display) {
     swap =
       <div className="col-lg-6 sm ">
-        <div className="card py-3">
+        <div className="card py-3 h-100">
           <div className="card-title"><b>BNB TO RUNX</b></div>
 
           <div className="card-body">
             <div className="grey_div">
-              <div className="d-flex justify-content-between">
-                <p>From</p>
-                <p>Balance: {userbalance} </p>
+              <div className="d-flex justify-content-between text-dark ">
+                <p clas>From</p>
+                <p clas>Balance: {userbalance} </p>
               </div>
               <div className="row">
                 <div className="col-lg-6">
@@ -388,7 +378,7 @@ function Main_home() {
             </div>
             <AiOutlineArrowDown className="fs-4 fw-bold my-2" onClick={clickme}></AiOutlineArrowDown>
             <div className="grey_div">
-              <div className="d-flex justify-content-between">
+              <div className="d-flex justify-content-between text-dark">
                 <p>To</p>
                 <p>Balance: {currentbalance} </p>
               </div>
@@ -410,7 +400,7 @@ function Main_home() {
                 <p>Rate</p>
                 <p>0.0155 BUSD = 1 PAL</p>
               </div> */}
-              <button className="btn btn-dark rounded-5 w-100 mt-2" onClick={buyToken}>Buy</button>
+              <button className="btn text-white rounded-5 w-100 mt-2" style={{ backgroundColor: "#43cea2 " }} onClick={buyToken}>Buy</button>
             </div>
           </div>
         </div>
@@ -418,11 +408,11 @@ function Main_home() {
   }
   else {
     swap = <div className="col-lg-6 sm ">
-      <div className="card py-3">
+      <div className="card py-3 h-100">
         <div className="card-title"><b>RUNX TO BNB</b> </div>
         <div className="card-body">
           <div className="grey_div">
-            <div className="d-flex justify-content-between">
+            <div className="d-flex justify-content-between text-dark">
               <p>From</p>
               <p>Balance: {currentbalance} </p>
             </div>
@@ -449,7 +439,7 @@ function Main_home() {
           <AiOutlineArrowDown className="fs-4 fw-bold my-2" onClick={clickme}></AiOutlineArrowDown>
 
           <div className="grey_div">
-            <div className="d-flex justify-content-between">
+            <div className="d-flex justify-content-between text-dark">
               <p>To</p>
               <p>Balance: {userbalance} </p>
             </div>
@@ -470,7 +460,7 @@ function Main_home() {
               </div>
 
             </div>
-            <button className="btn btn-dark rounded-5 w-100 mt-2" onClick={buyRunx}>Sale</button>
+            <button className="btn rounded-5 w-100 mt-2 text-white" style={{ backgroundColor: "#43cea2 " }} onClick={buyRunx}>Sale</button>
 
           </div>
 
@@ -485,45 +475,45 @@ function Main_home() {
           <div className="col-lg-10">
             <div className="row ">
               <div className="col-lg-6 ">
-                <div className="card ">
-                  <div className="card-body">
-                    <h3 className="box_h">Runx Phase </h3>
+                <div className="card h-100">
+                  <div className="card-body ">
+                    <h3 className="box_h  text-white">Runx Phase </h3>
                     <div className="d-flex justify-content-start">
-                      <button className="btn btn_card">Live</button>
-                      <span>Phase is Live</span>
+                      <button className="btn text-white " style={{ backgroundColor: "#185a9d " }}>Live</button>
+                      <span className="ms-3">Phase is Live</span>
                     </div>
                     <div className="line"></div>
-                    <div className="row justify-content-between mt-3">
-                      <div className="col-lg-6">
-                        <p className="card_para">Min Purchase</p>
-                        <p className="cardd_h">{minimumbuytoken} BNB</p>
+                    <div className="row justify-content-between mt-3 ">
+                      <div className="col-lg-6 ">
+                        <p className="card_para  text-white">Min Purchase</p>
+                        <p className="cardd_h  text-white">{minimumbuytoken} BNB</p>
                       </div>
                       <div className="col-lg-6">
-                        <p className="card_para ">Price per token</p>
-                        <p className="cardd_h">{pricepertoken} BNB</p>
+                        <p className="card_para  text-white">Price per token</p>
+                        <p className="cardd_h  text-white">{pricepertoken} BNB</p>
                       </div>
                     </div>
                     <div className="row justify-content-between mt-3">
                       <div className="col-lg-6">
-                        <p className="card_para">Referral Reward</p>
-                        <p className="cardd_h">{maxbuytoken} BNB</p>
+                        <p className="card_para  text-white">Referral Reward</p>
+                        <p className="cardd_h  text-white">{maxbuytoken} BNB</p>
                       </div>
                       <div className="col-lg-6">
-                        <p className="card_para">Reward Time</p>
-                        <p className="cardd_h">{days}:{hours}:{minutes}:{seconds}</p>
+                        <p className="card_para  text-white">Reward Time</p>
+                        <p className="cardd_h  text-white">{days}:{hours}:{minutes}:{seconds}</p>
                       </div>
                     </div>
                     <div className="row mt-3">
                       <div className="col-lg-6">
-                        <p className="card_para">withdrawable Amount</p>
-                        <p className="cardd_h">{withdrawableamount} Token</p>
+                        <p className="card_para  text-white">withdrawable Amount</p>
+                        <p className="cardd_h  text-white">{withdrawableamount} Token</p>
 
-                        <button className="btn btn-dark rounded-5 d-flex justify-content-lg-start ms-3" onClick={withdrawamount}>Withdraw</button>
+                        <button className="btn border text-white rounded-5 d-flex justify-content-lg-start ms-3" onClick={withdrawamount}>Withdraw</button>
 
                       </div>
                       <div className="col-lg-6">
-                        <p className="card_para">Remaning Amount</p>
-                        <p className="cardd_h">{withdrawupcoming} BNB</p>
+                        <p className="card_para  text-white">Remaning Amount</p>
+                        <p className="cardd_h  text-white">{withdrawupcoming} BNB</p>
 
                       </div>
                     </div>
@@ -542,13 +532,13 @@ function Main_home() {
                   value={`${initiallink}${refreallinks}`}
 
                   placeholder="refreal link "
-                  className="  rounded-5 py-2 bg-transparent form-control"
+                  className="  rounded-5 py-2 bg-transparent form-control text-white"
                 />
 
               </div>
               <div className="col-md-2 mt-5">
                 <CopyToClipboard onCopy={onCopy} text={initiallink + refreallinks}>
-                  <button className="btn btn-dark rounded-5 ">Copy Link</button>
+                  <button className="btn rounded-5 text-white mt-2" style={{ backgroundColor: "#004e92 " }}>Copy Link</button>
                 </CopyToClipboard>
               </div>
             </div>

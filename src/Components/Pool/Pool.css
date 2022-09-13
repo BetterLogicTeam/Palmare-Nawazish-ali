@@ -1,13 +1,18 @@
-.pool_main{
-    background-color: white;
+.pool_main {
+    background: linear-gradient(#000428, #004e92);
     padding: 20px 0px;
-    
+
 }
-.two_card{
+
+.two_card {
 
     padding: 10px;
     /* margin-right: 20px; */
     border-radius: 25px;
     box-shadow: 0 4px 12px #0000000d;
     margin-bottom: 20px;
+}
+
+body {
+    color: white !important;
 }
