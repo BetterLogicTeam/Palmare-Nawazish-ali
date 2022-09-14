@@ -203,6 +203,7 @@ function Main_home() {
       const web3 = window.web3;
       let palmareContractOf = new web3.eth.Contract(palmareContractAbi, palmareContractAddress);
       let withdrawremeningAmount = await palmareContractOf.methods.withdrawremeningAmount().send({ from: accadress });
+      toast.success("successfully withdraw")
     }
     catch (e) {
       toast.error(e.messasge)
@@ -253,7 +254,7 @@ function Main_home() {
 
       let check_bnbValue = await palmareContractOf.methods.BuyToken(refralmetamask).send({ from: accadress, value: val });
       setrefreallink(accadress)
-
+      toast.success("Transaction success")
       console.log("check token ", check_bnbValue);
 
     }
@@ -312,7 +313,7 @@ function Main_home() {
       console.log('what is input value after towi', val)
 
       let check_runxvalue = await palmareTokenof.methods.approve(palmareContractAddress, val).send({ from: accadress });
-      console.log("what is enter runx token value from approve", check_runxvalue);
+      toast.success("Transaction Approved")
 
       // console.log("what is enter runx token value", inputvaluerunx);
       // let myvalue = web3.utils.toWei(inputvalue)
@@ -325,7 +326,7 @@ function Main_home() {
       let check_bnbValue = await palmareContractOf.methods.SaleToken(val).send({ from: accadress });
       // let value_after = web3.utils.fromWei(check_bnbValue)
       // value_after = web3.utils.fromWei(value_after)
-      console.log("check runx ", check_bnbValue);
+      toast.success("Transaction successfully completed")
 
 
       // let pricePrToken = await nftContractOf.methods.pricePrToken().call();
