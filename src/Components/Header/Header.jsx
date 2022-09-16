@@ -8,6 +8,7 @@ import "./Header.css"
 // import { busdNftTokenAbi, busdNftTokenAddress, ULE_NFT_100, ULE_NFT_100_ABI, wireNftContractAbi, wireNftContractAddress, wireTokenAbi, wireTokenAddress } from '../../utilies/Bsc_contract';
 import { loadWeb3 } from '../../apis/api';
 import Web3 from 'web3'
+import { toast } from 'react-toastify';
 
 function Heade() {
   let [btnTxt, setBtTxt] = useState("Connect Wallet")
@@ -17,7 +18,8 @@ function Heade() {
     let acc = await loadWeb3();
     // console.log("ACC=",acc)
     if (acc == "No Wallet") {
-      setBtTxt("No Wallet")
+      toast.error('please install metamask')
+      setBtTxt("Install metamask")
     }
     else if (acc == "Wrong Network") {
       setBtTxt("Wrong Network")

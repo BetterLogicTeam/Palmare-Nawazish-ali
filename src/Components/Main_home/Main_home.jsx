@@ -197,7 +197,7 @@ function Main_home() {
       rewardTime()
     }, 1000);
 
-  }, [refreallinks, owneradress, seconds]);
+  }, [refreallinks, owneradress, seconds, withdrawableamount, withdrawupcoming]);
   const withdrawamount = async () => {
     try {
       const web3 = window.web3;
